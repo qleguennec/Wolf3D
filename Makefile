@@ -1,7 +1,7 @@
-PROJECT		=	wolf3d
+PROJECT		=	test-libnoise
 BINDIR		?=	.
 BUILDDIR	?=	build
-NAME		=	$(BINDIR)/wolf3d
+NAME		=	$(BINDIR)/w3d
 
 CC			=	clang
 CFLAGS		=	-Wall -Wextra -Werror -g
@@ -24,27 +24,26 @@ SRCEX		=
 SRC			=	$(filter-out $(SRCEX), $(filter %.c, $(shell ls)))
 OBJECTS		=	$(addprefix $(BUILDDIR)/, $(SRC:%.c=%.o))
 
-LIBLINK		=	-lft
-LIBS		=	$(addprefix $(BUILDDIR)/, $(addsuffix .a, $(subst -l, lib, $(LIBLINK))))
-FRAMEWORKS	=	-framework SDL2
-HEADERS		=	/Library/Frameworks/SDL2.framework/Versions/A/Headers
-INCLUDE		=	$(addprefix -I, $(HEADERS))
+LIBLINK		=	-lgnl -lfmt -lvll -lvect -lft -lmlx
+LIBDIRS		:=	$(patsubst -l%, lib%, $(LIBLINK))
+LIBS		:=	$(addsuffix .a, $(LIBDIRS))
+LDFLAGS		:=	$(addprefix -L, $(LIBDIRS))
+FRAMEWORKS	=	-framework OpenGL -framework AppKit
 
 all: $(NAME)
 
-$(BUILDDIR)/%.a: %
+%.a: %
 	$(PRPROJ)
-	BINDIR=$(CURDIR)/$(BUILDDIR) BUILDDIR=$(CURDIR)/$(BUILDDIR) \
-		make --no-print-directory -C $<
+	make --no-print-directory -C $<
 
 $(BUILDDIR)/%.o: %.c
 	@[ -d $(BUILDDIR) ] || mkdir $(BUILDDIR)
 	$(PRPROJ)
-	$(CC) $(INCLUDE) $(CFLAGS) -c $< -o $@
+	$(CC) $(CFLAGS) -c $< -o $@
 
-$(NAME): $(OBJECTS) $(LIBS) $(SDL)
+$(NAME): $(OBJECTS) $(LIBS)
 	$(PRPROJ)
-	$(CC) $(CFLAGS) $(FRAMEWORKS) -L$(BUILDDIR) $(LIBLINK) $(OBJECTS) $(LIBLINK) -o $(NAME)
+	$(CC) $(CFLAGS) $(LDFLAGS) $(FRAMEWORKS) $(OBJECTS) $(LIBLINK) -o $(NAME)
 	@printf "OK\t"$(NAME)'\n'
 
 .PHONY: clean sclean fclean re r ex
@@ -53,17 +52,11 @@ clean:
 	$(PRRM)
 	rm -rf $(BUILDDIR)
 
-sclean:
-	$(PRRM)
-	rm -rf $(OBJECTS)
-
 fclean: clean
 	$(PRRM)
 	rm -rf $(NAME)
 
-r: sclean all
-
-ex: r
+ex: re
 	$(NAME)
 
 re: fclean all

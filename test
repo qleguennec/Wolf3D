@@ -1,0 +1,7 @@
+#! /bin/bash
+
+DIR="$WP/w3d"
+PRG="$DIR/w3d"
+
+make -C $DIR
+$PRG < $DIR/maps/test

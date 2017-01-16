@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   w3d_sdl_init.c                                     :+:      :+:    :+:   */
+/*   w3d_ev_keyboard.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/11/17 14:25:03 by qle-guen          #+#    #+#             */
-/*   Updated: 2016/11/17 14:53:46 by qle-guen         ###   ########.fr       */
+/*   Created: 2016/11/30 15:35:36 by qle-guen          #+#    #+#             */
+/*   Updated: 2017/01/06 16:09:19 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "w3d.h"
 
-void		w3d_sdl_init(t_video *v)
+#define K_ESC	53
+
+int		w3d_ev_keyboard(int key, t_w3d_data *d)
 {
-	SDL_Init(SDL_INIT_VIDEO);
-	v->win = SDL_CreateWindow(WIN_TITLE
-		, SDL_WINDOWPOS_UNDEFINED
-		, SDL_WINDOWPOS_UNDEFINED
-		, WIN_W
-		, WIN_H
-		, 0);
+	if (key == K_ESC)
+		w3d_exit(d);
+	return (0);
 }

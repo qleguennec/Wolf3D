@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:13:33 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/16 18:25:14 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/16 18:49:48 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,8 @@
 # include <unistd.h>
 
 # define WIN_TITLE "Wolf3D"
-# define WIN_MINW	300
-# define WIN_MAXW	2000
-# define WIN_MINH	200
-# define WIN_MAXH	1000
+# define WIN_MINH	600
+# define WIN_MAXH	1080
 
 typedef struct		s_map
 {

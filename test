@@ -3,5 +3,7 @@
 DIR="$WP/w3d"
 PRG="$DIR/w3d"
 
-make -C $DIR re
-$PRG < $DIR/maps/test
+HEIGHT=1080
+
+make -C $DIR
+$PRG $HEIGHT < $DIR/maps/test

@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:12:48 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/16 18:27:04 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/16 18:49:21 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ static void
 }
 
 static void
-	init
+	init_video
 	(t_w3d_data *d)
 {
 	int		null;
@@ -55,20 +55,16 @@ int
 	t_w3d_data	d;
 
 	BZERO(d);
-	if (argc != 3)
+	if (argc != 2)
 		return (ERR(USAGE, 1, 0));
-	STRTOB10(argv[1], d.width);
-	if (d.width < WIN_MINW || d.width > WIN_MAXW)
-		return (ERR(WRONG_WIDTH, 1, WIN_MINW, WIN_MAXW));
-	STRTOB10(argv[2], d.height);
+	STRTOB10(argv[1], d.height);
 	if (d.height < WIN_MINH || d.height > WIN_MAXH)
 		return (ERR(WRONG_HEIGHT, 1, WIN_MINH, WIN_MAXH));
-	if (d.height > d.width)
-		return (ERR(WRONG_DIMENSIONS, 1, 0));
+	d.width = d.height * 16 / 9;
 	if (!w3d_map_parse(0, &d.map))
 		return (ERR(MAP_PARSE_ERR, 1, 0));
 	if (DBG_PRINT_MAP)
 		print_map(&d.map);
-	init(&d);
+	init_video(&d);
 	return (0);
 }

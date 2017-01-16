@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:12:48 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/16 14:41:53 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/16 18:27:04 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ static void
 	int		null;
 
 	d->v.mlx = mlx_init();
-	d->v.win = mlx_new_window(d->v.mlx, WIN_W, WIN_H, WIN_TITLE);
+	d->v.win = mlx_new_window(d->v.mlx, d->width, d->height, WIN_TITLE);
 	d->v.tex = (void *)mlx_get_data_addr(d->v.win, &null, &null, &null);
 	mlx_key_hook(d->v.win, &w3d_ev_keyboard, d);
 	mlx_loop_hook(d->v.mlx, &w3d_loop, d);
@@ -54,9 +54,17 @@ int
 {
 	t_w3d_data	d;
 
-	(void)argc;
-	(void)argv;
 	BZERO(d);
+	if (argc != 3)
+		return (ERR(USAGE, 1, 0));
+	STRTOB10(argv[1], d.width);
+	if (d.width < WIN_MINW || d.width > WIN_MAXW)
+		return (ERR(WRONG_WIDTH, 1, WIN_MINW, WIN_MAXW));
+	STRTOB10(argv[2], d.height);
+	if (d.height < WIN_MINH || d.height > WIN_MAXH)
+		return (ERR(WRONG_HEIGHT, 1, WIN_MINH, WIN_MAXH));
+	if (d.height > d.width)
+		return (ERR(WRONG_DIMENSIONS, 1, 0));
 	if (!w3d_map_parse(0, &d.map))
 		return (ERR(MAP_PARSE_ERR, 1, 0));
 	if (DBG_PRINT_MAP)

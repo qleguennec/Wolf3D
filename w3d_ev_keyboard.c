@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 15:35:36 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/06 16:09:19 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/17 13:46:31 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,10 @@
 
 #define K_ESC	53
 
-int		w3d_ev_keyboard(int key, t_w3d_data *d)
+t_i32
+	w3d_ev_keyboard
+	(t_i32 key
+	, t_w3d_data *d)
 {
 	if (key == K_ESC)
 		w3d_exit(d);

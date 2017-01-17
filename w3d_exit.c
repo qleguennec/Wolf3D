@@ -6,13 +6,15 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/06 16:05:39 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/17 11:15:13 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/17 13:47:03 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "w3d.h"
 
-void		w3d_exit(t_w3d_data *d)
+void
+	w3d_exit
+	(t_w3d_data *d)
 {
 	mlx_destroy_window(d->video.mlx, d->video.win);
 	exit(0);

@@ -6,13 +6,15 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 16:30:49 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/06 16:01:14 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/17 13:46:52 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "w3d.h"
 
-int		w3d_loop(t_w3d_data *d)
+t_i32
+	w3d_loop
+	(t_w3d_data *d)
 {
 	(void)d;
 	return (0);

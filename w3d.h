@@ -6,12 +6,15 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:13:33 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/16 18:49:48 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/17 12:25:13 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef W3D_H
 # define W3D_H
+
+# define T_U32_V2
+# define T_I32_V2
 
 # include "libfmt/libfmt.h"
 # include "libft/libft.h"
@@ -23,6 +26,11 @@
 # define WIN_TITLE "Wolf3D"
 # define WIN_MINH	600
 # define WIN_MAXH	1080
+
+# define WIDTH		(d->video.width)
+# define HEIGHT		(d->video.height)
+# define WIDTH_2	(WIDTH / 2)
+# define HEIGHT_2	(HEIGHT / 2)
 
 typedef struct		s_map
 {
@@ -36,19 +44,27 @@ typedef struct		s_video
 	t_u32			*tex;
 	void			*mlx;
 	void			*win;
+	size_t			width;
+	size_t			height;
 }					t_video;
+
+typedef struct		s_player
+{
+	t_u32_v2		pos;
+	t_u32_v2		dv;
+	t_u32_v2		cv;
+}					t_player;
 
 typedef struct		s_w3d_data
 {
-	t_video			v;
+	t_video			video;
 	t_map			map;
-	size_t			width;
-	size_t			height;
 }					t_w3d_data;
 
 bool				w3d_map_parse(t_i32 fd, t_map *map);
 int					w3d_ev_keyboard(t_i32 key, t_w3d_data *d);
 int					w3d_loop(t_w3d_data *d);
 void				w3d_exit(t_w3d_data *d);
+void				w3d_ray_dda(t_u32_v2 a, t_u32_v2 b, bool (*f)(t_u32_v2, void *), void *ctxt);
 
 #endif

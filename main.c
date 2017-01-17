@@ -6,13 +6,13 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:12:48 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/16 18:49:21 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/17 12:37:01 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "w3d.h"
 
-#define DBG_PRINT_MAP 1
+#define DBG_PRINT_MAP 0
 
 static void
 	print_map
@@ -39,12 +39,12 @@ static void
 {
 	int		null;
 
-	d->v.mlx = mlx_init();
-	d->v.win = mlx_new_window(d->v.mlx, d->width, d->height, WIN_TITLE);
-	d->v.tex = (void *)mlx_get_data_addr(d->v.win, &null, &null, &null);
-	mlx_key_hook(d->v.win, &w3d_ev_keyboard, d);
-	mlx_loop_hook(d->v.mlx, &w3d_loop, d);
-	mlx_loop(d->v.mlx);
+	d->video.mlx = mlx_init();
+	d->video.win = mlx_new_window(d->video.mlx, d->video.width, d->video.height, WIN_TITLE);
+	d->video.tex = (void *)mlx_get_data_addr(d->video.win, &null, &null, &null);
+	mlx_key_hook(d->video.win, &w3d_ev_keyboard, d);
+	mlx_loop_hook(d->video.mlx, &w3d_loop, d);
+	mlx_loop(d->video.mlx);
 }
 
 int
@@ -57,10 +57,10 @@ int
 	BZERO(d);
 	if (argc != 2)
 		return (ERR(USAGE, 1, 0));
-	STRTOB10(argv[1], d.height);
-	if (d.height < WIN_MINH || d.height > WIN_MAXH)
+	STRTOB10(argv[1], d.video.height);
+	if (d.video.height < WIN_MINH || d.video.height > WIN_MAXH)
 		return (ERR(WRONG_HEIGHT, 1, WIN_MINH, WIN_MAXH));
-	d.width = d.height * 16 / 9;
+	d.video.width = d.video.height * 16 / 9;
 	if (!w3d_map_parse(0, &d.map))
 		return (ERR(MAP_PARSE_ERR, 1, 0));
 	if (DBG_PRINT_MAP)

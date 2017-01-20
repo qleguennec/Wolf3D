@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:13:33 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/17 17:24:42 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/20 17:02:49 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # define T_F32_V2
 
 # include "X.h"
+# include "libcl/libcl.h"
 # include "libfmt/libfmt.h"
 # include "libft/libft.h"
 # include "libgnl/libgnl.h"
@@ -29,58 +30,62 @@
 # define WIN_TITLE "Wolf3D"
 # define WIN_MINH	600
 # define WIN_MAXH	1080
+# define WIN_RATIO	(16.0 / 9.0)
 
-# define WIDTH		(video->width)
-# define HEIGHT		(video->height)
-# define WIDTH_2	(WIDTH / 2)
-# define HEIGHT_2	(HEIGHT / 2)
+# define WIN_WIDTH		(window->size.x)
+# define WIN_HEIGHT		(window->size.y)
+# define WIN_XCENTER	(WIN_WIDTH / 2)
+# define WIN_YCENTER	(WIN_HEIGHT / 2)
+
+# define MAP_WIDTH		(map->size.x)
+# define MAP_HEIGHT		(map->size.y)
+# define MAP_XCENTER	(MAP_WIDTH / 2)
+# define MAP_YCENTER	(MAP_HEIGHT / 2)
 
 # define MAP(a, b)	(map->map[b * map->width + a])
 # define MAP2(v)	MAP((v).x, (v.y))
 
-# define INIT_CV	V2(t_f32, 20, 0)
-# define INIT_DV	V2(t_f32, 0, 60)
+# define INIT_DIRECTION_X	-1
+# define INIT_DIRECTION_Y	-1
+# define INIT_CAMERA_X		0
+# define INIT_CAMERA_Y		0.66
+
+# define CL_SRC_FILE	"w3d_ray_dda.cl"
+# define CL_KRL			"w3d_ray_dda"
+# define CL_BUILD_OPTS	"-I /Users/qle-guen/wp/w3d/mapgen"
+# define CL_BUILD_LINE	CL_KRL ":" CL_BUILD_OPTS
 
 typedef struct		s_map
 {
 	t_u8			*map;
-	size_t			width;
-	size_t			height;
+	cl_uint2		size;
 }					t_map;
 
-typedef struct		s_video
+typedef struct		s_window
 {
 	t_u32			*tex;
 	void			*mlx;
 	void			*win;
 	void			*img;
-	size_t			width;
-	size_t			height;
-}					t_video;
+	cl_uint2		size;
+}					t_window;
 
 typedef struct		s_player
 {
-	t_f32_v2		pos;
-	t_f32_v2		dv;
-	t_f32_v2		cv;
+	cl_float2		camera;
+	cl_float2		direction;
+	cl_float2		position;
 }					t_player;
 
 typedef struct		s_w3d_data
 {
 	t_map			map;
 	t_player		player;
-	t_video			video;
+	t_window		window;
 }					t_w3d_data;
 
 t_i32				w3d_loop(t_w3d_data *d);
 void				w3d_exit(t_w3d_data *d);
-/*
-** ray
-*/
-t_i32_v2			w3d_ray_dda(t_u32_v2 a, t_u32_v2 b, bool (*f)(t_u32_v2, void *), void *ctxt);
-/*
-** player
-*/
 
 /*
 ** events

@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/16 16:22:26 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/16 17:37:54 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/20 15:41:28 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,6 @@
 
 #define GNL_BUFF_SIZE 128
 #define GNL_SEP_CHAR MAP_NL
-#define GNL_IGNORE "#"
+#define GNL_IGNORE COMMENT
 
 #endif

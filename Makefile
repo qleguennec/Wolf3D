@@ -1,4 +1,4 @@
-PROJECT		=	test-libnoise
+PROJECT		=	w3d
 BINDIR		?=	.
 BUILDDIR	?=	build
 NAME		=	$(BINDIR)/w3d
@@ -24,11 +24,12 @@ SRCEX		=
 SRC			=	$(filter-out $(SRCEX), $(filter %.c, $(shell ls)))
 OBJECTS		=	$(addprefix $(BUILDDIR)/, $(SRC:%.c=%.o))
 
-LIBLINK		=	-lgnl -lfmt -lvll -lvect -lft
+LIBLINK		=	-lgnl -lfmt -lvll -lcl -lvect -lft
 LIBDIRS		:=	$(patsubst -l%, lib%, $(LIBLINK))
 LIBS		:=	$(addsuffix .a, $(LIBDIRS))
 LDFLAGS		:=	$(addprefix -L, $(LIBDIRS))
-FRAMEWORKS	=	-framework OpenGL -framework AppKit -lmlx
+LIBLINK		+=	-lmlx
+FRAMEWORKS	=	-framework OpenCL -framework OpenGL -framework AppKit
 
 all: $(NAME)
 

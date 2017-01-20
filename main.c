@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:12:48 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/17 17:05:37 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/20 17:24:47 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,14 @@ static bool
 	t_vect	buf;
 
 	vect_init(&buf);
-	if (!(map->width = gnl_read_all(fd, &buf, GNL_CHECK_SIZE, &map->height)))
+	if (!(map->size.x = gnl_read_all(fd
+		, &buf
+		, GNL_CHECK_SIZE
+		, (size_t *)&map->size.y)))
 		return (false);
 	map->map = buf.data;
-	map->width = buf.used / map->height;
+	ECHO_U32(map->size.x);
+	ECHO_U32(map->size.y);
 	return (true);
 }
 
@@ -34,38 +38,67 @@ static bool
 {
 	t_u8	*spawn;
 
-	if (!(spawn = ft_memchr(map->map, MAP_SPAWN, map->width * map->height)))
+	if (!(spawn = ft_memchr(map->map, MAP_SPAWN, MAP_WIDTH * MAP_HEIGHT)))
 		return (false);
 	*spawn = MAP_POINT;
-	player->pos = V2(t_f32
-		, (t_u32)((spawn - map->map) / map->width)
-		, (t_u32)((spawn - map->map) % map->width));
-	ECHO2_U32(player->pos);
-	player->dv = INIT_DV;
-	player->cv = INIT_CV;
+	player->position.x = (spawn - map->map) / MAP_WIDTH;
+	player->position.y = (spawn - map->map) % MAP_WIDTH;
+	player->camera.x = INIT_CAMERA_X;
+	player->camera.y = INIT_CAMERA_Y;
+	player->direction.x = INIT_DIRECTION_X;
+	player->direction.y = INIT_DIRECTION_Y;
 	return (true);
 }
 
 static bool
-	init_video
+	init_cl
+	(t_window *window
+	, t_map *map
+	, t_cl_info *cl_info
+	, t_cl_krl *cl_krl)
+{
+	int		*zeroes;
+	int		fd;
+
+	if ((fd = open(CL_SRC_FILE, O_RDONLY)) < 0)
+		return (false);
+	cl_init(cl_info);
+	cl_krl_init(cl_krl, 2);
+	cl_krl->sizes[0] = MAP_WIDTH * MAP_HEIGHT * sizeof(char);
+	cl_krl->sizes[1] = MAP_WIDTH * sizeof(int);
+	if (!cl_krl_build(cl_info, cl_krl, fd, CL_BUILD_LINE))
+		return (false);
+	close(fd);
+	MALLOC_ZERO_N(zeroes, MAP_WIDTH);
+	if (!(cl_write(cl_info, cl_krl, 0, map->map)
+		&& cl_write(cl_info, cl_krl, 1, zeroes)))
+		return (false);
+	free(zeroes);
+	CL_KRL_ARG(cl_krl->krl, 2, map->size);
+	CL_KRL_ARG(cl_krl->krl, 3, window->size);
+	return (true);
+}
+
+static bool
+	init_window
 	(t_w3d_data *d)
 {
-	int		null;
-	t_video	*video;
+	int			null;
+	t_window	*window;
 
-	video = &d->video;
-	if (!(video->mlx = mlx_init()))
+	window = &d->window;
+	if (!(window->mlx = mlx_init()))
 		return (false);
-	if (!(video->img = mlx_new_image(video->mlx, WIDTH, HEIGHT)))
+	if (!(window->img = mlx_new_image(window->mlx, WIN_WIDTH, WIN_HEIGHT)))
 		return (false);
-	if (!(video->tex = (void *)mlx_get_data_addr(video->img, &null, &null, &null)))
+	if (!(window->tex = (void *)mlx_get_data_addr(window->img, &null, &null, &null)))
 		return (false);
-	if (!(video->win = mlx_new_window(video->img, WIDTH, HEIGHT, WIN_TITLE)))
+	if (!(window->win = mlx_new_window(window->img, WIN_WIDTH, WIN_HEIGHT, WIN_TITLE)))
 		return (false);
-	mlx_loop_hook(video->mlx, &w3d_loop, d);
-	mlx_key_hook(video->win, &w3d_ev_keyboard, d);
-	mlx_hook(video->win, MotionNotify, PointerMotionMask, &w3d_ev_motion, d);
-	mlx_loop(video->mlx);
+	mlx_loop_hook(window->mlx, &w3d_loop, d);
+	mlx_key_hook(window->win, &w3d_ev_keyboard, d);
+	mlx_hook(window->win, MotionNotify, PointerMotionMask, &w3d_ev_motion, d);
+	mlx_loop(window->mlx);
 	return (true);
 }
 
@@ -74,20 +107,24 @@ int
 	(int argc
 	, char **argv)
 {
+	t_cl_info	cl_info;
+	t_cl_krl	cl_krl;
 	t_w3d_data	d;
 
 	BZERO(d);
 	if (argc != 2)
 		return (ERR(USAGE, 1, 0));
-	STRTOB10(argv[1], d.video.height);
-	if (d.video.height < WIN_MINH || d.video.height > WIN_MAXH)
+	STRTOB10(argv[1], d.window.size.y);
+	if (d.window.size.y < WIN_MINH || d.window.size.y > WIN_MAXH)
 		return (ERR(WRONG_HEIGHT, 1, WIN_MINH, WIN_MAXH));
-	d.video.width = d.video.height * 16 / 9;
+	d.window.size.x = d.window.size.y * WIN_RATIO;
 	if (!init_map(0, &d.map))
 		return (ERR(MAP_PARSE_ERR, 1, 0));
 	if (!init_player(&d.map, &d.player))
 		return (ERR(PLAYER_INIT_ERR, 1, 0));
-	if (!init_video(&d))
+	if (!init_cl(&d.window, &d.map, &cl_info, &cl_krl))
+		return (ERR(CL_INIT_ERR, 1, 0));
+	if (!init_window(&d))
 		return (ERR(MLX_INIT_ERR, 1, 0));
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 12:49:42 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/20 13:36:55 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/21 15:54:05 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,5 +23,6 @@ t_i32
 	(void)x;
 	(void)y;
 	window = &d->window;
+	window->update = true;
 	return (0);
 }

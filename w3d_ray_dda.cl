@@ -4,6 +4,7 @@ static void
 	ray_dda_perform
 	(global char *map
 	, global uint *outp
+	, size_t id
 	, uint2 map_size
 	, uint2 win_size
 	, uint2 coords
@@ -32,7 +33,7 @@ static void
 		}
 	}
 	wall_dist = (coords - position + (1 - step) / 2) / ray_dir;
-	*outp = win_size.y / (side ? wall_dist.y : wall_dist.x);
+	outp[id] = win_size.y / (side ? wall_dist.y : wall_dist.x);
 }
 
 kernel void
@@ -52,11 +53,11 @@ kernel void
 	float2	ray_dir_prod;
 	float2	side_dist;
 	int2	step;
-	uint	id;
+	size_t	id;
 	uint2	coords;
 
 	id = get_global_id(0);
-	camera_coord = 2 * camera / id - 1;
+	camera_coord = 2 * camera / id;
 	ray_dir = direction + camera * camera_coord;
 	coords = convert_uint2(position);
 	ray_dir_prod = ray_dir.x * ray_dir.y;
@@ -70,5 +71,5 @@ kernel void
 		side_dist.y = (position.y - coords.y) * delta.y;
 	else if ((step.y = 1))
 		side_dist.y = (coords.y + 1 - position.y) * delta.y;
-	ray_dda_perform(map, outp, map_size, win_size, coords, step, position, side_dist, ray_dir, delta);
+	ray_dda_perform(map, outp, id, map_size, win_size, coords, step, position, side_dist, ray_dir, delta);
 }

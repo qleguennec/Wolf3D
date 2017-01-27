@@ -1,4 +1,6 @@
 #include <mgen_map_conf.h>
+#define MAP(a, b) (map[b * map_size.x + a])
+#define MAP2(a) (MAP((a).x, (a).y))
 
 static void
 	ray_dda_perform
@@ -16,7 +18,7 @@ static void
 {
 	bool	side;
 
-	while (map[coords.y * map_size.x + coords.x] != MAP_WALL)
+	while (MAP2(coords) != MAP_WALL)
 	{
 		if (side_dist.x < side_dist.y)
 		{
@@ -62,7 +64,7 @@ kernel void
 	uint2	coords;
 
 	id = get_global_id(0);
-	ray_dir.x = 2 * (double)id / win_size.x - 1;
+	ray_dir.x = 2 * (double)id / win_size.x - 1.0;
 	ray_dir.y = ray_dir.x;
 	ray_dir *= camera;
 	ray_dir += direction;

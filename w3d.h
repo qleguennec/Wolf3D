@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:13:33 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/27 10:46:34 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/27 14:16:31 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,8 +52,8 @@
 # define MAP2(v)	MAP((v).x, (v.y))
 
 # define INIT_DIRECTION_X	-1
-# define INIT_DIRECTION_Y	0
-# define INIT_CAMERA_X		0
+# define INIT_DIRECTION_Y	1
+# define INIT_CAMERA_X		0.2
 # define INIT_CAMERA_Y		0.66
 # define INIT_PLAYER_MS		1.0
 # define INIT_PLAYER_RS		0.5

@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:12:48 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/27 09:26:10 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/27 10:34:27 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,8 @@ static bool
 	cl_init(cl_info);
 	cl_krl_init(cl_krl, 3);
 	cl_krl->sizes[0] = MAP_WIDTH * MAP_HEIGHT * sizeof(char);
-	cl_krl->sizes[1] = WIN_WIDTH * sizeof(t_u32);
-	cl_krl->sizes[2] = WIN_WIDTH * sizeof(t_u32);
+	cl_krl->sizes[1] = WIN_WIDTH * sizeof(cl_uint);
+	cl_krl->sizes[2] = WIN_WIDTH * sizeof(cl_uint);
 	if (cl_krl_build(cl_info, cl_krl, fd, CL_BUILD_LINE) != CL_SUCCESS)
 		return (false);
 	close(fd);
@@ -92,11 +92,10 @@ static bool
 		return (false);
 	if (!(window->tex = (t_u32 *)mlx_get_data_addr(window->img, &null, &null, &null)))
 		return (false);
-	ft_bzero(window->tex, WIN_AREA * sizeof(*window->tex));
 	if (!(window->win = mlx_new_window(window->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_TITLE)))
 		return (false);
 	mlx_loop_hook(window->mlx, &w3d_loop, d);
-	mlx_key_hook(window->win, &w3d_ev_keyboard, d);
+	//mlx_key_hook(window->win, &w3d_ev_keyboard, d);
 	//mlx_hook(window->win, MotionNotify, PointerMotionMask, &w3d_ev_motion, d);
 	window->update = true;
 	return (true);

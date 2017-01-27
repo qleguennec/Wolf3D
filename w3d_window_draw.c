@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 14:01:57 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/27 09:25:25 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/27 10:26:10 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void
 	w3d_window_draw
 	(t_window *window
-	, t_u32 *rays
-	, t_u32 *ray_colors)
+	, cl_uint *rays
+	, cl_uint *ray_colors)
 {
 	size_t	i;
 	t_u32	*out;

@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 11:27:05 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/27 09:26:20 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/27 10:48:34 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ static cl_int
 	return (cl_krl_exec(cl_info, krl, 1, &work_size));
 }
 
-cl_int
+void
 	w3d_ray_dda
 	(t_w3d_data *d)
 {
@@ -43,5 +43,9 @@ cl_int
 	map = &d->map;
 	player = &d->player;
 	window = &d->window;
-	return (ray_dda_run(player, window->size.x, cl_info, cl_krl->krl));
+	ray_dda_run(player, window->size.x, cl_info, cl_krl->krl);
+	ft_bzero(window->tex, WIN_AREA * sizeof(*window->tex));
+	cl_read(cl_info, cl_krl, 1, d->rays);
+	cl_read(cl_info, cl_krl, 2, d->ray_colors);
+	w3d_window_draw(window, d->rays, d->ray_colors);
 }

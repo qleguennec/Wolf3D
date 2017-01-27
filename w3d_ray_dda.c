@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 11:27:05 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/21 16:57:44 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/27 09:26:20 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ static cl_int
 	size_t	work_size;
 
 	work_size = win_width;
-	CL_KRL_ARG(krl, 4, player->camera);
-	CL_KRL_ARG(krl, 5, player->direction);
-	CL_KRL_ARG(krl, 6, player->position);
+	CL_KRL_ARG(krl, 5, player->camera);
+	CL_KRL_ARG(krl, 6, player->direction);
+	CL_KRL_ARG(krl, 7, player->position);
 	return (cl_krl_exec(cl_info, krl, 1, &work_size));
 }
 

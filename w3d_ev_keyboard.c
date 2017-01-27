@@ -6,34 +6,60 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 15:35:36 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/21 16:53:58 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/27 08:29:20 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "w3d.h"
 #include <Events.h>
 
-#define KEY(a) 			if (key == kVK_ ## a)
-#define KEY_UPDATE(a)	if (key == kVK_ ## a && (window->update = true))
+#define KEY(a) (key == kVK_ ## a)
 
-static void
-	ev_keyboard_pos_check_bounds
-	(t_map *map
-	, t_player *player
-	, t_i32_v2 delta)
+static bool
+	ev_keyboard_player_move
+	(t_w3d_data *d
+	, double xdir
+	, double ydir)
 {
-	t_i32_v2	sum;
+	cl_double2	new_pos;
+	t_i32_v2	map_coords;
+	t_map		*map;
+	t_player	*player;
 
-	sum = V2(t_i32
-		, ((t_i32)player->position.x + delta.x)
-		, ((t_i32)player->position.y + delta.y));
-	if (sum.x >= 0 && sum.x < (t_i32)MAP_WIDTH
-		&& sum.y >= 0 && sum.y < (t_i32)MAP_HEIGHT
-		&& MAP2(sum) != MAP_WALL)
+	player = &d->player;
+	map = &d->map;
+	new_pos.x = player->position.x + xdir * player->mspeed;
+	new_pos.y = player->position.y + ydir * player->mspeed;
+	map_coords.x = (t_i32)new_pos.x;
+	map_coords.y = (t_i32)new_pos.y;
+	if (MAP2(map_coords) != MAP_WALL)
 	{
-		player->position.x = sum.x;
-		player->position.y = sum.y;
+		player->position.x = new_pos.x;
+		player->position.y = new_pos.y;
+		return (true);
 	}
+	return (false);
+}
+
+static bool
+	ev_keyboard_player_rotate
+	(t_player *player
+	, double rotspeed)
+{
+	double		xtmp;
+	double		rcos;
+	double		rsin;
+
+	rcos = cos(rotspeed);
+	rsin = sin(rotspeed);
+	xtmp = player->direction.x * rcos - player->direction.y * rsin;
+	player->direction.y = player->direction.x * rsin
+		+ player->direction.y * rcos;
+	player->direction.x = xtmp;
+	xtmp = player->camera.x * rcos - player->camera.y * rsin;
+	player->camera.y = player->camera.x * rsin + player->camera.y * rcos;
+	player->camera.x = xtmp;
+	return (true);
 }
 
 t_i32
@@ -41,25 +67,24 @@ t_i32
 	(t_i32 key
 	, t_w3d_data *d)
 {
-	t_i32_v2	delta;
+	cl_double2	dir;
 	t_map		*map;
 	t_player	*player;
 	t_window	*window;
 
-	KEY(Escape)
+	if (KEY(Escape))
 		w3d_exit(d);
 	player = &d->player;
 	window = &d->window;
 	map = &d->map;
-	delta = V2(t_i32, 0, 0);
-	KEY_UPDATE(ANSI_A)
-		delta.x = -DX;
-	KEY_UPDATE(ANSI_D)
-		delta.x = DX;
-	KEY_UPDATE(ANSI_S)
-		delta.y = -DY;
-	KEY_UPDATE(ANSI_W)
-		delta.y = +DY;
-	ev_keyboard_pos_check_bounds(map, player, delta);
+	dir = player->direction;
+	if (KEY(ANSI_W))
+		window->update = ev_keyboard_player_move(d, dir.x, dir.y);
+	else if (KEY(ANSI_S))
+		window->update = ev_keyboard_player_move(d, -dir.x, -dir.y);
+	else if (KEY(ANSI_A))
+		window->update = ev_keyboard_player_rotate(player, player->rspeed);
+	else if (KEY(ANSI_D))
+		window->update = ev_keyboard_player_rotate(player, -player->rspeed);
 	return (0);
 }

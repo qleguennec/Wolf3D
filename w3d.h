@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:13:33 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/21 16:55:59 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/27 09:24:28 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,24 @@
 # define T_I32_V2
 # define T_F32_V2
 
-# include <X.h>
 # include "libcl/libcl.h"
 # include "libfmt/libfmt.h"
 # include "libft/libft.h"
 # include "libgnl/libgnl.h"
 # include "mapgen/mgen_map_conf.h"
 # include "w3d_warn.h"
+# include <math.h>
+# include <X.h>
+# include <mach/mach_time.h>
 # include <mlx.h>
+# include <time.h>
 // TODO remove
 # include <unistd.h>
 # include <stdio.h>
 
 # define WIN_TITLE "Wolf3D"
 # define WIN_MINH	600
-# define WIN_MAXH	1080
+# define WIN_MAXH	1300
 # define WIN_RATIO	(16.0 / 9.0)
 
 # define WIN_WIDTH		(window->size.x)
@@ -50,16 +53,18 @@
 
 # define INIT_DIRECTION_X	-1
 # define INIT_DIRECTION_Y	0
-# define INIT_CAMERA_X		0.66
+# define INIT_CAMERA_X		0
 # define INIT_CAMERA_Y		0.66
+# define INIT_PLAYER_MS		1.0
+# define INIT_PLAYER_RS		0.5
 
 # define CL_SRC_FILE	"w3d_ray_dda.cl"
 # define CL_KRL			"w3d_ray_dda"
 # define CL_BUILD_OPTS	"-I /Users/qle-guen/wp/w3d/mapgen"
 # define CL_BUILD_LINE	CL_KRL ":" CL_BUILD_OPTS
 
-# define DX		20.0
-# define DY		20.0
+# define DX		0.5
+# define DY		0.5
 
 # define COLOR_CLEAR	0x00
 
@@ -81,9 +86,11 @@ typedef struct		s_window
 
 typedef struct		s_player
 {
-	cl_float2		camera;
-	cl_float2		direction;
-	cl_float2		position;
+	cl_double2		camera;
+	cl_double2		direction;
+	cl_double2		position;
+	cl_double		mspeed;
+	cl_double		rspeed;
 }					t_player;
 
 typedef struct		s_w3d_data
@@ -93,7 +100,9 @@ typedef struct		s_w3d_data
 	t_window		window;
 	t_cl_info		cl_info;
 	t_cl_krl		cl_krl;
-	t_i32			*rays;
+	t_u32			*rays;
+	t_u32			*ray_colors;
+	double			ftime;
 }					t_w3d_data;
 
 t_i32				w3d_loop(t_w3d_data *d);
@@ -107,7 +116,8 @@ cl_int				w3d_ray_dda(t_w3d_data *d);
 /*
 ** window
 */
-void				w3d_window_draw(t_window *window, t_i32 *rays);
+double				w3d_window_fps(t_window *window, t_u64 start, t_u64 end);
+void				w3d_window_draw(t_window *window, t_u32 *rays, t_u32 *ray_colors);
 
 /*
 ** events

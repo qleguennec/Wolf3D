@@ -1,37 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   w3d_window_draw.c                                  :+:      :+:    :+:   */
+/*   w3d_window_fps.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/21 14:01:57 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/27 09:25:25 by qle-guen         ###   ########.fr       */
+/*   Created: 2017/01/25 13:19:53 by qle-guen          #+#    #+#             */
+/*   Updated: 2017/01/26 15:33:11 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "w3d.h"
 
-void
-	w3d_window_draw
+double
+	w3d_window_fps
 	(t_window *window
-	, t_u32 *rays
-	, t_u32 *ray_colors)
+	, t_u64 start
+	, t_u64 end)
 {
-	size_t	i;
-	t_u32	*out;
-	t_u32	end;
-	t_u32	start;
+	char		*buf;
+	double		dt;
 
-	i = 0;
-	out = window->tex;
-	while (i < window->size.x)
-	{
-		start = (-(t_i32)rays[i] / 2) + WIN_YCENTER;
-		end = rays[i] / 2 + WIN_YCENTER;
-		while (start < end)
-			out[start++ * WIN_WIDTH] = ray_colors[i];
-		out++;
-		i++;
-	}
+	dt = (double)(end - start) / 1000000000;
+	asprintf(&buf, "render time: %lfs    fps: %lf", dt, 1 / dt);
+	mlx_string_put(window->mlx, window->win, 0, 0, 0xFFFFFF, buf);
+	free(buf);
+	return (dt);
 }

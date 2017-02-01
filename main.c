@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:12:48 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/27 15:16:13 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/02/01 15:51:57 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,10 @@ static bool
 	player->camera.y = INIT_CAMERA_Y;
 	player->direction.x = INIT_DIRECTION_X;
 	player->direction.y = INIT_DIRECTION_Y;
+	player->camera_fix.x = INIT_CAMERA_X;
+	player->camera_fix.y = INIT_CAMERA_Y;
+	player->direction_fix.x = INIT_DIRECTION_X;
+	player->direction_fix.y = INIT_DIRECTION_Y;
 	player->mspeed = INIT_PLAYER_MS;
 	player->rspeed = INIT_PLAYER_RS;
 	return (true);
@@ -97,6 +101,7 @@ static bool
 	mlx_loop_hook(window->mlx, &w3d_loop, d);
 	mlx_key_hook(window->win, &w3d_ev_keyboard, d);
 	mlx_hook(window->win, MotionNotify, PointerMotionMask, &w3d_ev_motion, d);
+	mlx_mouse_set_pos(WIN_XCENTER, WIN_YCENTER);
 	window->update = true;
 	return (true);
 }
@@ -125,5 +130,6 @@ int
 		return (ERR(MLX_INIT_ERR, 1, 0));
 	MALLOC_N(d.rays, d.window.size.x);
 	MALLOC_N(d.ray_colors, d.window.size.x);
+	w3d_init_graphics(&d.window);
 	mlx_loop(d.window.mlx);
 }

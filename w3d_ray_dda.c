@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/21 11:27:05 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/27 10:48:34 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/01/28 09:16:23 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void
 	player = &d->player;
 	window = &d->window;
 	ray_dda_run(player, window->size.x, cl_info, cl_krl->krl);
-	ft_bzero(window->tex, WIN_AREA * sizeof(*window->tex));
+	ft_memcpy(window->tex, window->clear, WIN_AREA * sizeof(int));
 	cl_read(cl_info, cl_krl, 1, d->rays);
 	cl_read(cl_info, cl_krl, 2, d->ray_colors);
 	w3d_window_draw(window, d->rays, d->ray_colors);

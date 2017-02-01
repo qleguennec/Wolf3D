@@ -24,12 +24,11 @@ SRCEX		=
 SRC			=	$(filter-out $(SRCEX), $(filter %.c, $(shell ls)))
 OBJECTS		=	$(addprefix $(BUILDDIR)/, $(SRC:%.c=%.o))
 
-LIBLINK		=	-lgnl -lfmt -lvll -lcl -lvect -lft
+LIBLINK		=	-lgnl -lfmt -lvll -lcl -lvect -lft -lqlex
 LIBDIRS		:=	$(patsubst -l%, lib%, $(LIBLINK))
 LIBS		:=	$(addsuffix .a, $(LIBDIRS))
 LDFLAGS		:=	$(addprefix -L, $(LIBDIRS))
-LIBLINK		+=	-lmlx
-FRAMEWORKS	=	-framework OpenCL -framework OpenGL -framework AppKit
+FRAMEWORKS	=	-framework OpenCL -framework OpenGL -framework AppKit -framework Cocoa
 INCLUDES	+=	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers
 INCLUDES	+=	/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/System/Library/Frameworks/Tk.framework/Versions/8.4/Headers/X11/
 INCFLAGS	=	$(addprefix -I,$(INCLUDES))

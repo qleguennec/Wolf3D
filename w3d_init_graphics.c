@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   w3d_window_fps.c                                   :+:      :+:    :+:   */
+/*   w3d_init_graphics.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/25 13:19:53 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/28 09:18:20 by qle-guen         ###   ########.fr       */
+/*   Created: 2017/01/28 09:10:59 by qle-guen          #+#    #+#             */
+/*   Updated: 2017/01/28 09:37:59 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "w3d.h"
 
 void
-	w3d_window_fps
-	(t_window *window
-	, t_u64 delta)
+	w3d_init_graphics
+	(t_window *window)
 {
-	char		*buf;
-	double		dt;
+	size_t	i;
+	size_t	j;
 
-	dt = (double)delta / 1000000000;
-	asprintf(&buf, "render time: %lfs    fps: %lf", dt, 1 / dt);
-	mlx_string_put(window->mlx, window->win, 0, 0, 0, buf);
-	free(buf);
+	MALLOC_N(window->clear, WIN_AREA);
+	i = 0;
+	while (i < WIN_HEIGHT)
+	{
+		j = 0;
+		while (j < WIN_WIDTH)
+		{
+			window->clear[i * WIN_WIDTH + j] =
+				(i < WIN_HEIGHT / 2) ? WIN_TOP_COLOR : WIN_BOT_COLOR;
+			j++;
+		}
+		i++;
+	}
 }

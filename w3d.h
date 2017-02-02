@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:13:33 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/02/01 17:30:26 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/02/02 10:56:43 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,10 @@
 # define MAP2(v)	MAP((v).x, (v.y))
 
 # define INIT_DIRECTION_X	-1
-# define INIT_DIRECTION_Y	-0.001
-# define INIT_CAMERA_X		0.001
+# define INIT_DIRECTION_Y	0
+# define INIT_CAMERA_X		0
 # define INIT_CAMERA_Y		-1
-# define INIT_PLAYER_MS		0.5
-# define INIT_PLAYER_RS		0.00000005
+# define INIT_PLAYER_MS		0.25
 
 # define CL_SRC_FILE	"w3d_ray_dda.cl"
 # define CL_KRL			"w3d_ray_dda"
@@ -86,7 +85,6 @@ typedef struct		s_window
 	void			*img;
 	cl_uint2		size;
 	bool			update : 1;
-	bool			fix : 1;
 	t_u32			*clear;
 }					t_window;
 
@@ -98,7 +96,7 @@ typedef struct		s_player
 	cl_double2		direction_fix;
 	cl_double2		position;
 	cl_double		mspeed;
-	cl_double		rspeed;
+	bool			inv_rot : 1;
 }					t_player;
 
 typedef struct		s_w3d_data

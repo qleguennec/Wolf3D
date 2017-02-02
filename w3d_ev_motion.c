@@ -6,28 +6,41 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 12:49:42 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/02/01 17:46:20 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/02/02 13:58:10 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "w3d.h"
 
-static bool
+static void
 	ev_motion_camera_fix
 	(t_window *window
 	, t_player *player
 	, t_i32 x)
 {
-	if (x >= 0 && x < (t_i32)WIN_WIDTH)
-		return (false);
+	double		tmp;
+	t_i32		ox;
+
+	mlx_window_get_origin(window->win, &ox, NULL);
+	tmp = player->camera_fix.x;
 	if (x < 0)
-		mlx_mouse_set_pos(WIN_WIDTH + 100, WIN_YCENTER);
-	if (x >= (t_i32)WIN_WIDTH)
 	{
-		(void)player;
-		mlx_mouse_set_pos(100, WIN_YCENTER);
+		player->camera_fix.x = player->camera_fix.y;
+		player->camera_fix.y = -tmp;
+		tmp = player->direction_fix.x;
+		player->direction_fix.x = player->direction_fix.y;
+		player->direction_fix.y = -tmp;
+		mlx_mouse_set_pos(WIN_XCENTER + ox, WIN_YCENTER);
 	}
-	return (true);
+	else if (x >= (t_i32)WIN_WIDTH)
+	{
+		player->camera_fix.x = -player->camera_fix.y;
+		player->camera_fix.y = tmp;
+		tmp = player->direction_fix.x;
+		player->direction_fix.x = -player->direction_fix.y;
+		player->direction_fix.y = tmp;
+		mlx_mouse_set_pos(WIN_XCENTER + ox, WIN_YCENTER);
+	}
 }
 
 static void
@@ -57,21 +70,18 @@ t_i32
 	t_window	*window;
 
 	(void)y;
+	mlx_mouse_hidden(1);
 	window = &d->window;
 	player = &d->player;
-	if (window->fix)
+	if (x < 0 || x >= (t_i32)WIN_WIDTH)
 	{
-		player->camera_fix.x = player->camera.x;
-		player->camera_fix.y = player->camera.y;
-		player->direction_fix.x = player->direction.x;
-		player->direction_fix.y = player->direction.y;
-		window->fix = false;
+		ev_motion_camera_fix(window, player, x);
 		return (0);
 	}
-	else if ((window->fix = ev_motion_camera_fix(window, player, x)))
-		return (0);
 	window->update = true;
 	dx = 2 * (double)x / WIN_WIDTH - 1;
+	if (player->inv_rot)
+		dx = -dx;
 	trig = V2(t_f64, dx, sin(acos(dx)));
 	ev_motion_rotate(player, trig);
 	return (0);

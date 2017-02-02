@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:12:48 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/02/01 15:51:57 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/02/02 13:56:45 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,6 @@ static bool
 	player->direction_fix.x = INIT_DIRECTION_X;
 	player->direction_fix.y = INIT_DIRECTION_Y;
 	player->mspeed = INIT_PLAYER_MS;
-	player->rspeed = INIT_PLAYER_RS;
 	return (true);
 }
 
@@ -86,7 +85,7 @@ static bool
 	init_window
 	(t_w3d_data *d)
 {
-	t_i32		null;
+	t_i32		ox;
 	t_window	*window;
 
 	window = &d->window;
@@ -94,14 +93,17 @@ static bool
 		return (false);
 	if (!(window->img = mlx_new_image(window->mlx, WIN_WIDTH, WIN_HEIGHT)))
 		return (false);
-	if (!(window->tex = (t_u32 *)mlx_get_data_addr(window->img, &null, &null, &null)))
+	if (!(window->tex = (t_u32 *)mlx_get_data_addr(window->img, &ox, &ox, &ox)))
 		return (false);
 	if (!(window->win = mlx_new_window(window->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_TITLE)))
 		return (false);
+	mlx_do_key_autorepeaton(window->mlx);
 	mlx_loop_hook(window->mlx, &w3d_loop, d);
-	mlx_key_hook(window->win, &w3d_ev_keyboard, d);
 	mlx_hook(window->win, MotionNotify, PointerMotionMask, &w3d_ev_motion, d);
-	mlx_mouse_set_pos(WIN_XCENTER, WIN_YCENTER);
+	mlx_hook(window->win, KeyPress, 0, &w3d_ev_keyboard, d);
+	mlx_window_get_origin(window->win, &ox, NULL);
+	mlx_mouse_hidden(1);
+	mlx_mouse_set_pos(WIN_XCENTER + ox, WIN_YCENTER);
 	window->update = true;
 	return (true);
 }

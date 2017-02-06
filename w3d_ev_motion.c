@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/17 12:49:42 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/02/02 13:58:10 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/02/03 07:14:51 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,20 @@ static void
 	tmp = player->camera_fix.x;
 	if (x < 0)
 	{
-		player->camera_fix.x = player->camera_fix.y;
-		player->camera_fix.y = -tmp;
-		tmp = player->direction_fix.x;
-		player->direction_fix.x = player->direction_fix.y;
-		player->direction_fix.y = -tmp;
-		mlx_mouse_set_pos(WIN_XCENTER + ox, WIN_YCENTER);
-	}
-	else if (x >= (t_i32)WIN_WIDTH)
-	{
 		player->camera_fix.x = -player->camera_fix.y;
 		player->camera_fix.y = tmp;
 		tmp = player->direction_fix.x;
 		player->direction_fix.x = -player->direction_fix.y;
 		player->direction_fix.y = tmp;
+		mlx_mouse_set_pos(WIN_XCENTER + ox, WIN_YCENTER);
+	}
+	else if (x >= (t_i32)WIN_WIDTH)
+	{
+		player->camera_fix.x = player->camera_fix.y;
+		player->camera_fix.y = -tmp;
+		tmp = player->direction_fix.x;
+		player->direction_fix.x = player->direction_fix.y;
+		player->direction_fix.y = -tmp;
 		mlx_mouse_set_pos(WIN_XCENTER + ox, WIN_YCENTER);
 	}
 }
@@ -49,13 +49,13 @@ static void
 	, t_f64_v2 mat)
 {
 	player->camera.x = player->camera_fix.x * mat.x
-		+ player->camera_fix.y * mat.y;
-	player->camera.y = player->camera_fix.y * mat.x
-		- player->camera_fix.x * mat.y;
+		- player->camera_fix.y * mat.y;
+	player->camera.y = player->camera_fix.x * mat.y
+		+ player->camera_fix.y * mat.x;
 	player->direction.x = player->direction_fix.x * mat.x
-		+ player->direction_fix.y * mat.y;
-	player->direction.y = player->direction_fix.y * mat.x
-		- player->direction_fix.x * mat.y;
+		- player->direction_fix.y * mat.y;
+	player->direction.y = player->direction_fix.x * mat.y
+		+ player->direction_fix.y * mat.x;
 }
 
 t_i32
@@ -80,8 +80,6 @@ t_i32
 	}
 	window->update = true;
 	dx = 2 * (double)x / WIN_WIDTH - 1;
-	if (player->inv_rot)
-		dx = -dx;
 	trig = V2(t_f64, dx, sin(acos(dx)));
 	ev_motion_rotate(player, trig);
 	return (0);

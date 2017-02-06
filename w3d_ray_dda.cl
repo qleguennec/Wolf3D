@@ -1,5 +1,5 @@
-#include <mgen_map_conf.h>
-#define MAP(a, b) (map[b * map_size.x + a])
+#define MAP_WALL 'x'
+#define MAP(a, b) (map[b * 100 + a])
 #define MAP2(a) (MAP((a).x, (a).y))
 
 static void
@@ -7,7 +7,6 @@ static void
 	(global char *map
 	, global uint *rays
 	, global uint *ray_colors
-	, uint2 map_size
 	, uint2 win_size
 	, uint2 coords
 	, int2 step
@@ -37,9 +36,9 @@ static void
 		((coords.y - position.y + (1 - step.y) / 2) / ray_dir.y)
 		: ((coords.x - position.x + (1 - step.x) / 2) / ray_dir.x));
 	if (side)
-		*ray_colors = step.y < 0 ? 0xFF : 0xFFFF;
+		*ray_colors = step.y < 0 ? 0x7B237B : 0x704C9C;
 	else
-		*ray_colors = step.x < 0 ? 0x96227b : 0xbc1616;
+		*ray_colors = step.x < 0 ? 0x512D81 : 0x954395;
 }
 
 kernel void
@@ -47,7 +46,6 @@ kernel void
 	(global char *map
 	, global int *rays
 	, global int *ray_colors
-	, uint2 map_size
 	, uint2 win_size
 	, double2 camera
 	, double2 direction
@@ -56,7 +54,6 @@ kernel void
 	double	cameraX;
 	double	ray_dir_2;
 	double2	delta;
-	double2	delta_pos;
 	double2	ray_dir;
 	double2	side_dist;
 	int2	step;
@@ -69,7 +66,6 @@ kernel void
 	ray_dir *= camera;
 	ray_dir += direction;
 	coords = convert_uint2(position);
-	delta_pos = (double2){position.x - coords.x, position.y - coords.y};
 	ray_dir_2 = (ray_dir.x * ray_dir.x) / (ray_dir.y * ray_dir.y);
 	delta.x = sqrt(1.0 + 1.0 / ray_dir_2);
 	delta.y = sqrt(1.0 + ray_dir_2);
@@ -81,7 +77,6 @@ kernel void
 	ray_dda_perform(map
 		, rays + id
 		, ray_colors + id
-		, map_size
 		, win_size
 		, coords
 		, step

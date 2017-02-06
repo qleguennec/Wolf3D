@@ -1,35 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   w3d_init_graphics.c                                :+:      :+:    :+:   */
+/*   mgen_map_conf.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/01/28 09:10:59 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/28 09:37:59 by qle-guen         ###   ########.fr       */
+/*   Created: 2017/01/16 16:44:15 by qle-guen          #+#    #+#             */
+/*   Updated: 2017/02/06 09:33:29 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "w3d.h"
+#ifndef MGEN_MAP_CONF_H
+# define MGEN_MAP_CONF_H
 
-void
-	w3d_init_graphics
-	(t_window *window)
-{
-	size_t	i;
-	size_t	j;
+# define MAP_DOOR	' '
+# define MAP_NL		'\n'
+# define MAP_NONE	'.'
+# define MAP_POINT	' '
+# define MAP_SPAWN	'o'
+# define MAP_WALL	'x'
+# define COMMENT	"#"
 
-	MALLOC_N(window->clear, WIN_AREA);
-	i = 0;
-	while (i < WIN_HEIGHT)
-	{
-		j = 0;
-		while (j < WIN_WIDTH)
-		{
-			window->clear[i * WIN_WIDTH + j] =
-				(i < WIN_HEIGHT / 2) ? WIN_TOP_COLOR : WIN_BOT_COLOR;
-			j++;
-		}
-		i++;
-	}
-}
+#endif

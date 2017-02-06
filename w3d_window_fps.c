@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/01/25 13:19:53 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/01/28 09:18:20 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/02/05 12:11:50 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,6 @@ void
 
 	dt = (double)delta / 1000000000;
 	asprintf(&buf, "render time: %lfs    fps: %lf", dt, 1 / dt);
-	mlx_string_put(window->mlx, window->win, 0, 0, 0, buf);
+	mlx_string_put(window->mlx, window->win, 0, 0, 0xFFFFFF, buf);
 	free(buf);
 }

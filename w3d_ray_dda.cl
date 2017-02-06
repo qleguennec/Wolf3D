@@ -1,5 +1,5 @@
 #define MAP_WALL 'x'
-#define MAP(a, b) (map[b * 100 + a])
+#define MAP(a, b) (map[b * 80 + a])
 #define MAP2(a) (MAP((a).x, (a).y))
 
 static void

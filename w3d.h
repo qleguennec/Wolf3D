@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:13:33 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/02/06 09:50:25 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/02/06 10:01:50 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,10 +50,10 @@
 
 # define BG_COLOR		0x444044
 
-# define MAP_WIDTH		100
-# define MAP_HEIGHT		100
-# define MAP_XCENTER	50
-# define MAP_YCENTER	50
+# define MAP_WIDTH		80
+# define MAP_HEIGHT		80
+# define MAP_XCENTER	(MAP_WIDTH / 2)
+# define MAP_YCENTER	(MAP_HEIGHT / 2)
 
 # define COLLIDER_RADIUS	2
 # define COLLIDER_FRACT		4.5

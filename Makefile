@@ -1,7 +1,7 @@
-PROJECT		=	w3d
+PROJECT		=	wolf3d
 BINDIR		?=	.
 BUILDDIR	?=	build
-NAME		=	$(BINDIR)/w3d
+NAME		=	$(BINDIR)/wolf3d
 
 CC			=	clang
 CFLAGS		=	-Wall -Wextra -Werror -g

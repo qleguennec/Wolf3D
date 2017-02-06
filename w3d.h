@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:13:33 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/02/06 10:01:50 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/02/06 10:23:13 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@
 # include <mach/mach_time.h>
 # include <math.h>
 # include <time.h>
-// TODO remove
-# include <unistd.h>
-# include <stdio.h>
-# include <assert.h>
 
 # define WIN_TITLE "Wolf3D"
 # define WIN_MINH	600
@@ -121,7 +117,8 @@ void				w3d_ray_dda(t_w3d_data *d);
 /*
 ** window
 */
-void				w3d_window_draw(t_window *window, cl_uint *rays, cl_uint *ray_colors);
+void				w3d_window_draw
+	(t_window *window, cl_uint *rays, cl_uint *ray_colors);
 void				w3d_window_draw_skybox(t_window *window, t_player *player);
 void				w3d_window_fps(t_window *window, t_u64 delta);
 

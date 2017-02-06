@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/30 16:30:49 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/02/06 08:09:33 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/02/06 10:37:39 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static void
 
 	window = &d->window;
 	player = &d->player;
-	ft_memcpy(window->tex + WIN_YCENTER * WIN_WIDTH, window->bg, WIN_AREA * 2);
+	ft_memcpy(window->tex + WIN_YCENTER * WIN_WIDTH, window->bg, 2 * WIN_AREA);
 	w3d_window_draw_skybox(window, player);
 	w3d_ray_dda(d);
 	w3d_window_draw(window, d->rays, d->ray_colors);

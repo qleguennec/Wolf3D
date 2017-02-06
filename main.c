@@ -1,4 +1,4 @@
- /* ************************************************************************** */
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -6,7 +6,7 @@
 /*   By: qle-guen <qle-guen@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/17 12:12:48 by qle-guen          #+#    #+#             */
-/*   Updated: 2017/02/06 10:20:30 by qle-guen         ###   ########.fr       */
+/*   Updated: 2017/02/06 10:28:55 by qle-guen         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,12 +96,14 @@ static bool
 		return (false);
 	if (!(window->tex = (t_u32 *)mlx_get_data_addr(window->img, &ox, &ox, &ox)))
 		return (false);
-	if (!(window->win = mlx_new_window(window->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_TITLE)))
+	if (!(window->win =
+		mlx_new_window(window->mlx, WIN_WIDTH, WIN_HEIGHT, WIN_TITLE)))
 		return (false);
 	mlx_do_key_autorepeaton(window->mlx);
 	mlx_loop_hook(window->mlx, &w3d_loop, d);
 	mlx_hook(window->win, MotionNotify, PointerMotionMask, &w3d_ev_motion, d);
-	mlx_hook(window->win, DestroyNotify, StructureNotifyMask, (int (*)(void))&w3d_exit, d);
+	mlx_hook(window->win, DestroyNotify, StructureNotifyMask
+		, (int (*)(void))&w3d_exit, d);
 	mlx_hook(window->win, KeyPress, 0, &w3d_ev_keyboard, d);
 	mlx_window_get_origin(window->win, &ox, NULL);
 	mlx_mouse_hidden(1);
